@@ -1,0 +1,39 @@
+import 'package:flutter/material.dart';
+import 'sos_page.dart';
+import 'location_page.dart';
+import 'settings_page.dart';
+
+class ParentHomePage extends StatefulWidget {
+  @override
+  _ParentHomePageState createState() => _ParentHomePageState();
+}
+
+class _ParentHomePageState extends State<ParentHomePage> {
+  int _currentIndex = 0;
+  final List<Widget> _pages = [
+    SOSPage(),
+    LocationPage(isParent: true),
+    SettingsPage(isChild: false), // Parent user
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: _pages[_currentIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.notifications), label: 'Notifications'),
+          BottomNavigationBarItem(icon: Icon(Icons.location_on), label: 'Location'),
+          BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Settings'),
+        ],
+        currentIndex: _currentIndex,
+        selectedItemColor: Colors.blue,
+        onTap: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
+      ),
+    );
+  }
+}
