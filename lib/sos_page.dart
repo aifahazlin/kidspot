@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:camera/camera.dart';
+
 
 class SOSPage extends StatelessWidget {
   const SOSPage({Key? key}) : super(key: key);
@@ -6,10 +8,10 @@ class SOSPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 2, // We have two tabs
+      length: 2,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Notifications'), // Blue AppBar with Page Name
+          title: const Text('Notifications'),
           bottom: const TabBar(
             tabs: [
               Tab(icon: Icon(Icons.video_call), text: 'Video'),
@@ -19,8 +21,8 @@ class SOSPage extends StatelessWidget {
         ),
         body: const TabBarView(
           children: [
-            VideoMessagesPage(), // Video Messages tab
-            TextMessagesPage(),  // Text Messages tab
+            VideoMessagesPage(),
+            TextMessagesPage(),
           ],
         ),
       ),
@@ -28,68 +30,161 @@ class SOSPage extends StatelessWidget {
   }
 }
 
-class VideoMessagesPage extends StatelessWidget {
+class VideoMessagesPage extends StatefulWidget {
   const VideoMessagesPage({Key? key}) : super(key: key);
 
   @override
+  _VideoMessagesPageState createState() => _VideoMessagesPageState();
+}
+
+class _VideoMessagesPageState extends State<VideoMessagesPage> {
+  CameraController? _controller;
+  Future<void>? _initializeControllerFuture;
+  bool isRecording = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeCamera();
+  }
+
+  Future<void> _initializeCamera() async {
+    final cameras = await availableCameras();
+    final firstCamera = cameras.first;
+
+    _controller = CameraController(
+      firstCamera,
+      ResolutionPreset.low, // Change to a lower resolution
+    );
+
+    _initializeControllerFuture = _controller!.initialize();
+  }
+
+  void _recordVideo() async {
+    if (isRecording) {
+      // Stop recording
+      await _controller!.stopVideoRecording();
+      setState(() {
+        isRecording = false;
+      });
+    } else {
+      // Start recording
+      await _controller!.startVideoRecording();
+      setState(() {
+        isRecording = true;
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller?.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text('Video Messages'), // Placeholder for video messages content
+    return FutureBuilder<void>(
+      future: _initializeControllerFuture,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          // If the Future is complete, display the camera preview
+          return Column(
+            children: [
+              AspectRatio(
+                aspectRatio: _controller!.value.aspectRatio,
+                child: CameraPreview(_controller!),
+              ),
+              ElevatedButton(
+                onPressed: _recordVideo,
+                child: Text(isRecording ? 'Stop Recording' : 'Record Video'),
+              ),
+            ],
+          );
+        } else {
+          // Otherwise, display a loading indicator
+          return const Center(child: CircularProgressIndicator());
+        }
+      },
     );
   }
 }
 
-class TextMessagesPage extends StatelessWidget {
+class TextMessagesPage extends StatefulWidget {
   const TextMessagesPage({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    // List of predefined messages that the child can choose to send
-    final List<String> predefinedMessages = [
-      "I need help!",
-      "I'm at school.",
-      "Can you pick me up?",
-      "I finished my homework.",
-      "I'm feeling sick."
-    ];
+  _TextMessagesPageState createState() => _TextMessagesPageState();
+}
 
-    return ListView.builder(
-      itemCount: predefinedMessages.length,
-      itemBuilder: (context, index) {
-        return ListTile(
-          title: Text(predefinedMessages[index]),
-          trailing: const Icon(Icons.send),
-          onTap: () {
-            // Placeholder function to simulate sending a message
-            showDialog(
-              context: context,
-              builder: (context) => AlertDialog(
-                title: const Text("Send this message?"),
-                content: Text(predefinedMessages[index]),
-                actions: [
-                  TextButton(
-                    child: const Text("Cancel"),
-                    onPressed: () => Navigator.of(context).pop(),
+class _TextMessagesPageState extends State<TextMessagesPage> {
+  final TextEditingController _messageController = TextEditingController();
+  final List<String> predefinedMessages = [
+    "I need help!",
+    "I'm at school.",
+    "Can you pick me up?",
+    "I finished my homework.",
+    "I'm feeling sick.",
+  ];
+
+  void _sendMessage(String? message) {
+    if (message != null && message.isNotEmpty) {
+      // TODO: Implement the logic to send the message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Message sent: $message"),
+          backgroundColor: Colors.green,
+        ),
+      );
+      _messageController.clear(); // Clear the text field
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Expanded(
+          child: ListView.builder(
+            itemCount: predefinedMessages.length,
+            itemBuilder: (context, index) {
+              return ListTile(
+                title: Text(predefinedMessages[index]),
+                trailing: const Icon(Icons.send),
+                onTap: () => _sendMessage(predefinedMessages[index]),
+              );
+            },
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  controller: _messageController,
+                  decoration: const InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white,
+                    hintText: "Write a message...",
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(25.0)),
+                      borderSide: BorderSide.none,
+                    ),
                   ),
-                  TextButton(
-                    child: const Text("Send"),
-                    onPressed: () {
-                      // TODO: Implement message sending logic
-                      Navigator.of(context).pop();
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text("Message sent: ${predefinedMessages[index]}"),
-                          duration: const Duration(seconds: 2),
-                        ),
-                      );
-                    },
-                  ),
-                ],
+                  minLines: 1,
+                  maxLines: 5,
+                ),
               ),
-            );
-          },
-        );
-      },
+              const SizedBox(width: 10),
+              IconButton(
+                icon: const Icon(Icons.send, color: Colors.blue),
+                onPressed: () => _sendMessage(_messageController.text),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

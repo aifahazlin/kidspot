@@ -46,6 +46,7 @@ dependencies:
   geocoding:
   geolocator:
   location:
+  camera:
 
 dev_dependencies:
   flutter_test:
