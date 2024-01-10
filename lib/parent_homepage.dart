@@ -11,7 +11,7 @@ class ParentHomePage extends StatefulWidget {
 class _ParentHomePageState extends State<ParentHomePage> {
   int _currentIndex = 0;
   final List<Widget> _pages = [
-    SOSPage(),
+    SOSPage(isParent: true), // Pass isParent: true here for parent functionality
     LocationPage(isParent: true),
     SettingsPage(isChild: false), // Parent user
   ];

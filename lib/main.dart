@@ -58,7 +58,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     _pages = [
-      const SOSPage(),
+      SOSPage(isParent: widget.isParent), // Pass the isParent flag here
       LocationPage(isParent: widget.isParent), // Pass the isParent flag
       SettingsPage(isChild: !widget.isParent), // Set isChild based on isParent
     ];

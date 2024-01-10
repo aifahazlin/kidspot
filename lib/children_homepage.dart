@@ -11,7 +11,7 @@ class ChildHomePage extends StatefulWidget {
 class _ChildHomePageState extends State<ChildHomePage> {
   int _currentIndex = 0;
   final List<Widget> _pages = [
-    const SOSPage(),
+    SOSPage(isParent: false), // Pass isParent: false here
     LocationPage(isParent: false), // Explicitly pass isParent for child users
     const SettingsPage(isChild: true),
   ];
