@@ -55,7 +55,7 @@ class _VideoMessagesPageState extends State<VideoMessagesPage> {
 
     _controller = CameraController(
       firstCamera,
-      ResolutionPreset.low, // Change to a lower resolution
+      ResolutionPreset.medium,
     );
 
     _initializeControllerFuture = _controller!.initialize();
@@ -63,44 +63,34 @@ class _VideoMessagesPageState extends State<VideoMessagesPage> {
 
   void _recordVideo() async {
     if (isRecording) {
-      // Stop recording
       await _controller!.stopVideoRecording();
-      setState(() {
-        isRecording = false;
-      });
+      setState(() => isRecording = false);
     } else {
-      // Start recording
       await _controller!.startVideoRecording();
-      setState(() {
-        isRecording = true;
-      });
+      setState(() => isRecording = true);
     }
   }
 
   @override
-  void dispose() {
-    _controller?.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    if (widget.isParent) {
-      return Center(child: Text('Leave a Video Message for Your Child'));
-    } else {
-      return FutureBuilder<void>(
+    return Scaffold(
+      body: FutureBuilder<void>(
         future: _initializeControllerFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
-            return Column(
+            return Stack(
               children: [
-                AspectRatio(
-                  aspectRatio: _controller!.value.aspectRatio,
-                  child: CameraPreview(_controller!),
-                ),
-                ElevatedButton(
-                  onPressed: _recordVideo,
-                  child: Text(isRecording ? 'Stop Recording' : 'Record Video'),
+                CameraPreview(_controller!),
+                Positioned(
+                  bottom: 30,
+                  left: 0,
+                  right: 0,
+                  child: Center(
+                    child: RecordButton(
+                      isRecording: isRecording,
+                      onPressed: _recordVideo,
+                    ),
+                  ),
                 ),
               ],
             );
@@ -108,10 +98,40 @@ class _VideoMessagesPageState extends State<VideoMessagesPage> {
             return const Center(child: CircularProgressIndicator());
           }
         },
-      );
-    }
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller?.dispose();
+    super.dispose();
   }
 }
+
+class RecordButton extends StatelessWidget {
+  final bool isRecording;
+  final VoidCallback onPressed;
+
+  const RecordButton({Key? key, required this.isRecording, required this.onPressed}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onPressed,
+      child: CircleAvatar(
+        radius: 30,
+        backgroundColor: isRecording ? Colors.red[800] : Colors.blue,
+        child: Icon(
+          isRecording ? Icons.stop : Icons.videocam,
+          size: 40,
+          color: Colors.white,
+        ),
+      ),
+    );
+  }
+}
+
 
 class TextMessagesPage extends StatefulWidget {
   final bool isParent;

@@ -4,17 +4,27 @@ import 'location_page.dart';
 import 'settings_page.dart';
 
 class ParentHomePage extends StatefulWidget {
+  final String userName;
+  final String userEmail;
+
+  ParentHomePage({Key? key, required this.userName, required this.userEmail}) : super(key: key);
   @override
   _ParentHomePageState createState() => _ParentHomePageState();
 }
 
-class _ParentHomePageState extends State<ParentHomePage> {
+  class _ParentHomePageState extends State<ParentHomePage> {
   int _currentIndex = 0;
-  final List<Widget> _pages = [
-    SOSPage(isParent: true), // Pass isParent: true here for parent functionality
-    LocationPage(isParent: true),
-    SettingsPage(isChild: false), // Parent user
-  ];
+  late final List<Widget> _pages;
+
+  @override
+  void initState() {
+    super.initState();
+    _pages = [
+      SOSPage(isParent: true),
+      LocationPage(isParent: true),
+      SettingsPage(isChild: false, userName: widget.userName, userEmail: widget.userEmail),
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {

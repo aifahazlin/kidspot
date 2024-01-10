@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class QRScannerPage extends StatefulWidget {
   @override
@@ -10,6 +11,7 @@ class QRScannerPage extends StatefulWidget {
 class _QRScannerPageState extends State<QRScannerPage> {
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   QRViewController? controller;
+  final String childUserId = "123"; // Define childUserId
 
   @override
   void reassemble() {
@@ -39,8 +41,14 @@ class _QRScannerPageState extends State<QRScannerPage> {
   void _onQRViewCreated(QRViewController controller) {
     this.controller = controller;
     controller.scannedDataStream.listen((scanData) {
-      // Process the scanned QR Code
-      // For example, handling the scanned data:
+      // Ensure scanData.code is not null before processing
+      if (scanData.code != null) {
+        var parts = scanData.code!.split(':');
+        if (parts.length == 3 && parts[0] == 'kidspot' && parts[1] == 'parent') {
+          String parentUserId = parts[2];
+          // Link child's user ID with parent's user ID in Firestore
+          _linkChildWithParent(childUserId, parentUserId);
+        }
       controller.pauseCamera();
       showDialog(
         context: context,
@@ -58,8 +66,22 @@ class _QRScannerPageState extends State<QRScannerPage> {
           ],
         ),
       );
+    }}
+    );
+  }
+
+  void _linkChildWithParent(String childUserId, String parentUserId) {
+    // Assuming you have a 'children' collection where each document represents a child
+    FirebaseFirestore.instance.collection('children').doc(childUserId).update({
+      'parentUserId': parentUserId,
+      // Any other data you need to update
+    }).then((_) {
+      print('Child linked with parent successfully.');
+    }).catchError((error) {
+      print('Error linking child with parent: $error');
     });
   }
+
 
   @override
   void dispose() {

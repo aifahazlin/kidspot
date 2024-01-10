@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class QRCodePage extends StatelessWidget {
-  final String qrData;
+  String qrData = 'kidspot:parent:X232EpYE99DF1Aa5rntv';
 
   QRCodePage({Key? key, required this.qrData}) : super(key: key);
 

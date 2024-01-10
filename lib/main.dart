@@ -55,13 +55,20 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
+    // Replace these placeholders with actual user data
+    String userName = "User Name"; // Placeholder for user name
+    String userEmail = "user@example.com"; // Placeholder for user email
+
     _pages = [
-      SOSPage(isParent: widget.isParent), // Pass the isParent flag here
-      LocationPage(isParent: widget.isParent), // Pass the isParent flag
-      SettingsPage(isChild: !widget.isParent), // Set isChild based on isParent
+      SOSPage(isParent: widget.isParent),
+      LocationPage(isParent: widget.isParent),
+      SettingsPage(
+          isChild: !widget.isParent,
+          userName: userName,
+          userEmail: userEmail
+      ),
     ];
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

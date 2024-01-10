@@ -47,6 +47,7 @@ dependencies:
   geolocator:
   location:
   camera:
+  cloud_firestore: ^4.14.0
 
 dev_dependencies:
   flutter_test:

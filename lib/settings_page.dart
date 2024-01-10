@@ -4,11 +4,20 @@ import 'dart:math';
 import 'login_page.dart';  // Ensure this file exists in your project.
 import 'qrscanner_page.dart';
 import 'qrcode_page.dart';
+import 'children_homepage.dart';  // Add this import
+import 'parent_homepage.dart';  // Add this import
 
 class SettingsPage extends StatelessWidget {
   final bool isChild;
+  final String userName;
+  final String userEmail;
 
-  const SettingsPage({Key? key, required this.isChild}) : super(key: key);
+  const SettingsPage({
+    Key? key,
+    required this.isChild,
+    required this.userName,
+    required this.userEmail,
+  }) : super(key: key);
 
   // Generate a random string for the QR code
   String generateRandomString(int length) {
@@ -32,9 +41,20 @@ class SettingsPage extends StatelessWidget {
             icon: Icons.account_circle,
             title: 'Account Setting',
             onTap: () {
-              // TODO: Implement Account Setting logic
+              // Use 'isChild' property here instead of 'isChildFlag'
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => SettingsPage(
+                    isChild: isChild, // Use the existing 'isChild' property
+                    userName: userName,
+                    userEmail: userEmail,
+                  ),
+                ),
+              );
             },
           ),
+
           _settingsOption(
             context,
             icon: Icons.devices,
@@ -72,6 +92,7 @@ class SettingsPage extends StatelessWidget {
     );
   }
 
+
   Widget _userProfileSection() {
     return Container(
       padding: const EdgeInsets.all(16.0),
@@ -86,11 +107,11 @@ class SettingsPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'User Name',
+                userName,
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               Text(
-                'user@example.com',
+                userEmail,
                 style: TextStyle(fontSize: 14, color: Colors.grey),
               ),
             ],
@@ -122,4 +143,19 @@ class SettingsPage extends StatelessWidget {
       MaterialPageRoute(builder: (context) => QRScannerPage()),
     );
   }
+
+  Widget _navigateToHomeOption(BuildContext context) {
+    return ListTile(
+      leading: Icon(Icons.home),
+      title: Text('Go to Home'),
+      onTap: () {
+        if (isChild) {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => ChildHomePage(userName: userName, userEmail: userEmail)));
+        } else {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => ParentHomePage(userName: userName, userEmail: userEmail)));
+        }
+      },
+    );
+  }
+}
 }
