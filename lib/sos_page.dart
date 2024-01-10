@@ -11,17 +11,17 @@ class SOSPage extends StatelessWidget {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          title: Text(isParent ? 'Messages to Child' : 'Notifications'),
+          title: Text(isParent ? 'Parent Dashboard' : 'Child Dashboard'),
           bottom: const TabBar(
             tabs: [
-              Tab(icon: Icon(Icons.video_call), text: 'Video'),
-              Tab(icon: Icon(Icons.message), text: 'Messages'),
+              Tab(icon: Icon(Icons.notifications), text: 'Notifications'),
+              Tab(icon: Icon(Icons.message), text: 'Text Messages'),
             ],
           ),
         ),
         body: TabBarView(
           children: [
-            VideoMessagesPage(isParent: isParent),
+            isParent ? LocationAlertsPage() : VideoMessagesPage(isParent: isParent),
             TextMessagesPage(isParent: isParent),
           ],
         ),
@@ -132,6 +132,22 @@ class RecordButton extends StatelessWidget {
   }
 }
 
+class LocationAlertsPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    // Implementation for LocationAlertsPage for parent users
+    return ListView.builder(
+      itemCount: 5,  // Replace with actual data length
+      itemBuilder: (context, index) {
+        return ListTile(
+          leading: Icon(Icons.location_on),
+          title: Text('Child left school area'),  // Replace with actual data
+          subtitle: Text('10 mins ago'),  // Replace with actual data
+        );
+      },
+    );
+  }
+}
 
 class TextMessagesPage extends StatefulWidget {
   final bool isParent;

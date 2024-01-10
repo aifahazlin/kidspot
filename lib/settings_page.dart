@@ -46,14 +46,13 @@ class SettingsPage extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                   builder: (context) => SettingsPage(
-                    isChild: isChild, // Use the existing 'isChild' property
+                    isChild: isChild,
                     userName: userName,
                     userEmail: userEmail,
                   ),
                 ),
               );
-            },
-          ),
+            }),
 
           _settingsOption(
             context,
@@ -83,10 +82,9 @@ class SettingsPage extends StatelessWidget {
               // Implement Logout logic
               Navigator.of(context).pushAndRemoveUntil(
                 MaterialPageRoute(builder: (context) => LoginPage()),
-                    (Route<dynamic> route) => false,
-              );
-            },
-          ),
+                (Route<dynamic> route) => false);
+            }),
+
         ],
       ),
     );
@@ -100,14 +98,14 @@ class SettingsPage extends StatelessWidget {
         children: [
           CircleAvatar(
             radius: 30,
-            backgroundImage: AssetImage('assets/images/kidspot_ss.png'),
+            backgroundImage: AssetImage('assets/images/kidspot_ss.png')
           ),
           const SizedBox(width: 16.0),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                userName,
+                userName.isEmpty ? "Tap to add name" : userName,
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               Text(
@@ -121,41 +119,57 @@ class SettingsPage extends StatelessWidget {
     ); return Container();  // Placeholder
   }
 
-  Widget _settingsOption(BuildContext context, {required IconData icon, required String title, required VoidCallback onTap}) {
-    return ListTile(
-      leading: Icon(icon),
-      title: Text(title),
-      onTap: onTap,
+  void _editNameDialog(BuildContext context) {
+    final TextEditingController _nameController = TextEditingController(text: userName);
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Edit Name'),
+          content: TextFormField(
+            controller: _nameController,
+            decoration: InputDecoration(
+              hintText: 'Enter your name',
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+            TextButton(
+              child: Text('Save'),
+              onPressed: () {
+                // TODO: Implement name saving logic
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
+
+Widget _settingsOption(BuildContext context, {required IconData icon, required String title, required VoidCallback onTap}) {
+  return ListTile(leading: Icon(icon), title: Text(title), onTap: onTap);
+}
 
   void _showQRCodePage(BuildContext context) {
     String qrData = generateRandomString(10);
 
+
     Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) => QRCodePage(qrData: qrData),
+      builder: (context) => QRCodePage(qrData: qrData)
     ));
   }
 
   void _navigateToQRScannerPage(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => QRScannerPage()),
+      MaterialPageRoute(builder: (context) => QRScannerPage())
     );
   }
 
-  Widget _navigateToHomeOption(BuildContext context) {
-    return ListTile(
-      leading: Icon(Icons.home),
-      title: Text('Go to Home'),
-      onTap: () {
-        if (isChild) {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => ChildHomePage(userName: userName, userEmail: userEmail)));
-        } else {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => ParentHomePage(userName: userName, userEmail: userEmail)));
-        }
-      },
-    );
-  }
-}
+
 }
