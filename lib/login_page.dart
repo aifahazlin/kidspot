@@ -44,31 +44,52 @@ class LoginPage extends StatelessWidget {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Sign Up'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              ElevatedButton(
-                child: Text('Sign in with Google'),
-                onPressed: () {
-                  Navigator.pop(context); // Close the dialog
-                  signInWithGoogle(context);
-                },
-                style: ElevatedButton.styleFrom(primary: Colors.red),
-              ),
-              ElevatedButton(
-                child: Text('Sign up manually'),
-                onPressed: () {
-                  Navigator.pop(context); // Close the dialog
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => SignUpPage()),
-                  );
-                },
-                style: ElevatedButton.styleFrom(primary: Colors.blue),
-              ),
-            ],
+        return Dialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+          child: Container(
+            padding: EdgeInsets.all(16.0),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12.0),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Text(
+                  'Sign Up',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
+                ),
+                SizedBox(height: 16),
+                ElevatedButton.icon(
+                  icon: Icon(Icons.g_mobiledata, color: Colors.white),
+                  label: Text('Sign in with Google', style: TextStyle(color: Colors.white)),
+                  onPressed: () {
+                    Navigator.pop(context);
+                    signInWithGoogle(context);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.blue.shade800,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                  ),
+                ),
+                SizedBox(height: 16), // Consistent spacing
+                ElevatedButton.icon(
+                  icon: Icon(Icons.email, color: Colors.white),
+                  label: Text('Sign up manually', style: TextStyle(color: Colors.white)),
+                  onPressed: () {
+                    Navigator.pop(context);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => SignUpPage()),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.green.shade500,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                  ),
+                ),
+              ],
+            ),
           ),
         );
       },
@@ -104,8 +125,18 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Colors.white,
+              Colors.white,
+            ],
+          ),
+        ),
+        padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 40.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -116,16 +147,16 @@ class LoginPage extends StatelessWidget {
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black),
             ),
             SizedBox(height: 40),
-            ElevatedButton(
-              child: Text('Login as Parent'),
+            _buildLoginButton(
+              label: 'Login as Parent',
+              color: Colors.indigo.shade500,
               onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => LoginForm(role: 'parent'))),
-              style: ElevatedButton.styleFrom(primary: Colors.blue),
             ),
-            SizedBox(height: 10),
-            ElevatedButton(
-              child: Text('Login as Child'),
+            SizedBox(height: 20),
+            _buildLoginButton(
+              label: 'Login as Child',
+              color: Colors.lightBlue.shade500,
               onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => LoginForm(role: 'child'))),
-              style: ElevatedButton.styleFrom(primary: Colors.green),
             ),
             SizedBox(height: 40),
             InkWell(
@@ -138,6 +169,20 @@ class LoginPage extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildLoginButton({required String label, required Color color, required VoidCallback onPressed}) {
+    return ElevatedButton(
+      child: Text(label, style: TextStyle(fontSize: 18, color: Colors.white)),
+      onPressed: onPressed,
+      style: ElevatedButton.styleFrom(
+        primary: color,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        padding: EdgeInsets.symmetric(vertical: 12),
       ),
     );
   }
