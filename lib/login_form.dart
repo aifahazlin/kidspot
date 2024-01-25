@@ -15,6 +15,7 @@ class LoginForm extends StatefulWidget {
 class _LoginFormState extends State<LoginForm> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  bool obscurePassword = true;
 
   void _tryLogin() async {
     try {
@@ -27,7 +28,7 @@ class _LoginFormState extends State<LoginForm> {
       // Fetch user details
       User? user = userCredential.user;
       if (user != null) {
-        String userName = user.displayName ?? "No Name Provided";
+        String userName = user.displayName ?? "Name";
         String userEmail = user.email ?? "No Email Provided";
 
         if (widget.role == 'parent') {
@@ -76,8 +77,18 @@ class _LoginFormState extends State<LoginForm> {
             ),
             TextField(
               controller: passwordController,
-              decoration: InputDecoration(labelText: 'Password'),
-              obscureText: true,
+              decoration: InputDecoration(
+                labelText: 'Password',
+                suffixIcon: IconButton(
+                  onPressed: () {
+                    setState(() {
+                      obscurePassword = !obscurePassword;
+                    });
+                  },
+                  icon: Icon(obscurePassword ? Icons.visibility : Icons.visibility_off),
+                ),
+              ),
+              obscureText: obscurePassword,
             ),
             SizedBox(height: 20),
             ElevatedButton(
@@ -90,7 +101,6 @@ class _LoginFormState extends State<LoginForm> {
     );
   }
 }
-
 extension StringExtension on String {
   String capitalize() {
     return "${this[0].toUpperCase()}${this.substring(1)}";

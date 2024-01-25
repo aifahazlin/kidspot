@@ -27,6 +27,10 @@ android {
     compileSdkVersion flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
 
+    lintOptions {
+        disable 'deprecation', 'unchecked'
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -44,6 +48,9 @@ android {
     }
 
     buildTypes {
+        debug {
+            debuggable true
+        }
         release {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
@@ -54,6 +61,7 @@ android {
 
 dependencies {
     // ...
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     // Import the Firebase BoM
     implementation(platform("com.google.firebase:firebase-bom:32.7.0"))
@@ -74,8 +82,9 @@ dependencies {
 
     // Declare the dependency for the Cloud Firestore library
     // When using the BoM, you don't specify versions in Firebase library dependencies
-    implementation("com.google.firebase:firebase-firestore")
-
+    implementation 'com.google.firebase:firebase-firestore-ktx:23.0.0' // Use the latest version
+    implementation "com.google.firebase:firebase-messaging:14.7.10"
+    implementation 'androidx.multidex:multidex:2.0.1'
 }
 
 flutter {

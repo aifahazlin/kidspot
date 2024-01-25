@@ -29,12 +29,12 @@ class DefaultFirebaseOptions {
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
+              'you can reconfigure this by running the FlutterFire CLI again.',
         );
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
+              'you can reconfigure this by running the FlutterFire CLI again.',
         );
       default:
         throw UnsupportedError(
@@ -47,6 +47,7 @@ class DefaultFirebaseOptions {
     apiKey: 'AIzaSyDkhPcY3kUg5SvTk0tPIXjCLpu6FzpZg5s',
     appId: '1:850444676445:web:9be60f8b28b303ec210cb4',
     messagingSenderId: '850444676445',
+    databaseURL: 'https://kidspot-c8914-default-rtdb.asia-southeast1.firebasedatabase.app/',
     projectId: 'kidspot-c8914',
     authDomain: 'kidspot-c8914.firebaseapp.com',
     storageBucket: 'kidspot-c8914.appspot.com',
@@ -56,6 +57,8 @@ class DefaultFirebaseOptions {
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyA8WusM0Of3L4l0kqtY85DyEfFOKCCiWNE',
     appId: '1:850444676445:android:ef3bf0275bf27bb8210cb4',
+    databaseURL: 'https://kidspot-c8914-default-rtdb.asia-southeast1.firebasedatabase.app/',
+
     messagingSenderId: '850444676445',
     projectId: 'kidspot-c8914',
     storageBucket: 'kidspot-c8914.appspot.com',
@@ -67,6 +70,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '850444676445',
     projectId: 'kidspot-c8914',
     storageBucket: 'kidspot-c8914.appspot.com',
+    databaseURL: 'https://kidspot-c8914-default-rtdb.asia-southeast1.firebasedatabase.app/',
+
     androidClientId: '850444676445-pdm08192gdo86cocc21hf943e3i5csin.apps.googleusercontent.com',
     iosClientId: '850444676445-8ghpr9c7n43i5l8al9ovujrsg4tonp4a.apps.googleusercontent.com',
     iosBundleId: 'com.example.kidspotApp',
@@ -78,6 +83,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '850444676445',
     projectId: 'kidspot-c8914',
     storageBucket: 'kidspot-c8914.appspot.com',
+    databaseURL: 'https://kidspot-c8914-default-rtdb.asia-southeast1.firebasedatabase.app/',
+
     androidClientId: '850444676445-pdm08192gdo86cocc21hf943e3i5csin.apps.googleusercontent.com',
     iosClientId: '850444676445-3sg11ophjnavol03s3khl42s0tps7lel.apps.googleusercontent.com',
     iosBundleId: 'com.example.kidspotApp.RunnerTests',

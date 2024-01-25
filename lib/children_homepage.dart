@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'sos_page.dart';
 import 'location_page.dart';
 import 'settings_page.dart';
-
+import 'package:geolocator/geolocator.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 class ChildHomePage extends StatefulWidget {
   final String userName;
   final String userEmail;
@@ -47,4 +51,6 @@ class _ChildHomePageState extends State<ChildHomePage> {
       ),
     );
   }
+
+
 }

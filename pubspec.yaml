@@ -40,7 +40,7 @@ dependencies:
   google_maps_flutter:
   flutter_svg:
   http:
-  firebase_core: # Use the latest version
+  firebase_core: ^2.24.2 # Use the latest version
   firebase_auth:
   google_sign_in:
   geocoding:
@@ -48,6 +48,10 @@ dependencies:
   location:
   camera:
   cloud_firestore: ^4.14.0
+  uuid: ^3.0.4
+  firebase_database: any
+  firebase_messaging: ^14.7.10
+  url_launcher: ^6.2.4
 
 dev_dependencies:
   flutter_test:

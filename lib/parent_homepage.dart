@@ -12,7 +12,7 @@ class ParentHomePage extends StatefulWidget {
   _ParentHomePageState createState() => _ParentHomePageState();
 }
 
-  class _ParentHomePageState extends State<ParentHomePage> {
+class _ParentHomePageState extends State<ParentHomePage> {
   int _currentIndex = 0;
   late final List<Widget> _pages;
 
